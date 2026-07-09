@@ -39,4 +39,8 @@ public class Student {
     @Min(value = 2,message = "Age should be Greater then 2")
     @Max(value = 60,message = "Age should be less then 60")
     private Integer age;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 }
