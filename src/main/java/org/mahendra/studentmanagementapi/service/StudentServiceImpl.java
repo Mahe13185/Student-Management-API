@@ -4,6 +4,7 @@ import org.mahendra.studentmanagementapi.dto.StudentRequestDTO;
 import org.mahendra.studentmanagementapi.dto.StudentResponseDTO;
 import org.mahendra.studentmanagementapi.entity.Role;
 import org.mahendra.studentmanagementapi.entity.Student;
+import org.mahendra.studentmanagementapi.exception.ResourceNotFoundException;
 import org.mahendra.studentmanagementapi.repository.RoleRepository;
 import org.mahendra.studentmanagementapi.repository.StudentRepository;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class StudentServiceImpl implements StudentService{
     @Override
     public StudentResponseDTO createStudent(StudentRequestDTO dto) {
         Role role = roleRepository.findById(dto.getRoleId())
-                .orElseThrow();
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found id: " + dto.getRoleId()));
         Student student = new Student();
         student.setFirstName(dto.getFirstName());
         student.setLastName(dto.getLastName());
@@ -53,16 +54,13 @@ public class StudentServiceImpl implements StudentService{
 
     @Override
     public Student getStudentByID(Long id) {
-        return studentRepository.findById(id).orElse(null);
+        return studentRepository.findById(id).orElseThrow (() -> new ResourceNotFoundException("Student not found"));
     }
 
     @Override
     public Student updateStudent(Long id, Student updatedstudent) {
-        Student existingStudent = studentRepository.findById(id).orElse(null);
+        Student existingStudent = studentRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Student not found") );
 
-        if(existingStudent == null){
-            return null;
-        }
         existingStudent.setFirstName(updatedstudent.getFirstName());
         existingStudent.setLastName(updatedstudent.getLastName());
         existingStudent.setAge(updatedstudent.getAge());

@@ -2,6 +2,7 @@ package org.mahendra.studentmanagementapi.service;
 
 import jakarta.annotation.Resource;
 import org.mahendra.studentmanagementapi.entity.Role;
+import org.mahendra.studentmanagementapi.exception.ResourceNotFoundException;
 import org.mahendra.studentmanagementapi.repository.RoleRepository;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -27,15 +28,13 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role getRoleByID(Long id) {
-        return roleRepository.findById(id).orElse(null);
+        return roleRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Role not found with ID : " + id));
     }
 
     @Override
     public Role updateRole(Long id, Role updatedRole) {
-        Role existingRole = roleRepository.findById(id).orElse(null);
-        if(existingRole == null){
-            return null;
-        }
+        Role existingRole = roleRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Role not found"));
         existingRole.setName(updatedRole.getName());
         return roleRepository.save(existingRole);
     }
