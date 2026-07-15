@@ -19,30 +19,35 @@ public class StudentController {
         this.studentService = studentService;
     }
     @PostMapping
-    public StudentResponseDTO createStudent(
+    public ResponseEntity<StudentResponseDTO> createStudent(
             @Valid @RequestBody StudentRequestDTO dto) {
 
-        return studentService.createStudent(dto);
+        StudentResponseDTO responseDTO =  studentService.createStudent(dto);
 
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(responseDTO);
     }
     @GetMapping
     public ResponseEntity<List<Student>> getallStudents(){
-        List<Student> student = studentService.getallStudents();
-        return ResponseEntity.ok(student);
+        List<Student> students = studentService.getallStudents();
+        return ResponseEntity.ok(students);
     }
 
     @GetMapping("/{id}")
-    public Student getStudentByID(@PathVariable Long id){
-        return studentService.getStudentByID(id);
+    public ResponseEntity<Student> getStudentByID(@PathVariable Long id){
+        Student student =  studentService.getStudentByID(id);
+        return ResponseEntity.ok(student);
     }
 
     @PutMapping("/{id}")
-    public Student updateStudentByID(@PathVariable Long id,@RequestBody Student student){
-        return studentService.updateStudent(id, student);
+    public ResponseEntity<Student> updateStudentByID(@PathVariable Long id,@RequestBody Student student){
+        Student updateStudent =  studentService.updateStudent(id, student);
+        return ResponseEntity.ok(updateStudent);
     }
     @DeleteMapping("/{id}")
-    public void deleteStudentByID(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteStudentByID(@PathVariable Long id) {
         studentService.deleteStudent(id);
+        return ResponseEntity.notFound().build();
     }
 
 }
