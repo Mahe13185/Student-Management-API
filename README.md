@@ -1,4 +1,4 @@
-# 🎓 Student Management API
+# 🎓 Student Management API.......
 
 A RESTful Student Management System built with Spring Boot following layered architecture and enterprise development practices.
 
